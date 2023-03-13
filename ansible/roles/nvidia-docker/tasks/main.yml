@@ -1,0 +1,32 @@
+---    
+- name: Add NVIDIA Docker Key
+  apt_key:
+    url: "{{ nvidia_docker_repo_gpg_url }}"
+    state: present
+  become: yes
+
+- name: Add NVIDIA Docker repo
+  get_url:
+    url: https://nvidia.github.io/nvidia-docker/ubuntu{{ansible_distribution_major_version}}.04/nvidia-docker.list
+    dest: /etc/apt/sources.list.d/nvidia-docker.list
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+
+- name: Install NVIDIA Docker Packages
+  apt:
+    name: 
+      - nvidia-container-runtime
+      - nvidia-docker2
+    state: present
+    update_cache: yes
+  register: nvidia_docker_apt
+  become: yes
+  
+# - name: Reload Docker configuration
+#   service: 
+#     name: docker
+#     state: reloaded
+#   when: nvidia_docker_apt.changed == True
+#   become: yes

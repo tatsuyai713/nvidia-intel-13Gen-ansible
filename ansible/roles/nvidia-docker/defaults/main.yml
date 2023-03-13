@@ -1,0 +1,6 @@
+---
+nvidia_docker_repo_base_url: "https://nvidia.github.io/nvidia-docker"
+nvidia_docker_repo_gpg_url: "{{ nvidia_docker_repo_base_url }}/gpgkey"
+nvidia_docker_add_repo: true
+nvidia_docker_install_wrapper: true
+nvidia_docker_skip_docker_reload: false

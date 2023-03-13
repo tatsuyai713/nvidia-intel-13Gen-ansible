@@ -1,0 +1,51 @@
+---
+- name: check nouveau blacklist file
+  stat:
+    path: /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+  register: nouveau_blacklist
+
+- name: touch nouveau blacklist file
+  command: touch /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+  when: nouveau_blacklist.stat.exists == false
+  become: yes
+
+- name: add nouveau blacklist
+  lineinfile:
+      path: /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+      regexp: '^blacklist '
+      insertafter: '^#blacklist'
+      line: 'blacklist nouveau'
+  become: yes
+
+- name: add nouveau blacklist
+  lineinfile:
+      path: /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+      regexp: '^options nouveau'
+      insertafter: '^#options nouveau'
+      line: 'options nouveau modset=0'
+  become: yes
+
+- name: update-initramfs for disable nouveau
+  command: update-initramfs -u
+  become: yes
+
+- name: Add Ubuntu Graphic Driver PPA
+  apt_repository:
+    validate_certs: no
+    repo: 'ppa:graphics-drivers/ppa'
+    state: present
+  become: yes
+
+- name: Install NVIDIA Driver
+  apt:
+    name: "nvidia-driver-{{ nvidia_driver_version }}"
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: Hold NVIDIA DRIVER Version
+  ansible.builtin.dpkg_selections:
+    name: nvidia-driver-{{ nvidia_driver_version }}
+    selection: hold
+  become: yes
+    

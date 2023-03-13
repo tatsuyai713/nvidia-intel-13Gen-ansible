@@ -1,0 +1,17 @@
+---
+- name: install basic tools
+  apt:
+    name:
+      - vim
+      - htop
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - git
+      - gnupg2
+      - lsb-release
+      - silversearcher-ag
+      - initramfs-tools
+    update_cache: yes
+  become: yes

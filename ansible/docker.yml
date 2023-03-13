@@ -1,0 +1,8 @@
+---
+- hosts: docker
+  gather_facts: true
+  become: no
+  roles:
+    - { role: common, tags: ["Common"] }
+    - { role: ros2, tags: ["ROS2"], ros_distro: "humble"}
+    - { role: nvidia-machine-learning, tags: ["NVIDIA Machine Learning"] }

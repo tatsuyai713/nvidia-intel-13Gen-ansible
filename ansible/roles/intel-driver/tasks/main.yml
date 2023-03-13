@@ -1,0 +1,123 @@
+---
+- name: Install related deb packages
+  apt:
+    name:
+      - gpg-agent
+      - wget
+    update_cache: yes
+  become: yes
+  when: ansible_distribution_major_version == "20"
+
+- name: Add Intel graphic repo key
+  ansible.builtin.get_url:
+    url: https://repositories.intel.com/graphics/intel-graphics.key
+    dest: /usr/share/keyrings/intel-graphics.asc
+  become: yes
+  when: ansible_distribution_major_version == "20"
+
+- name: Add Intel graphic repo
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.asc] https://repositories.intel.com/graphics/ubuntu focal-devel main'
+    filename: intel-graphics
+    state: present
+  become: yes
+  when: ansible_distribution_major_version == "20"
+
+- name: Install OEM Kernel
+  apt:
+    name:
+      - "linux-oem-{{ansible_distribution_major_version}}.04"
+      - "linux-image-{{oem_kernel_for_intel_driver}}"
+    state: latest
+    update_cache: yes
+  become: yes
+  when: ansible_distribution_major_version == "20"
+
+- name: Uninstall Generic/HWE Kernel
+  apt:
+    name:
+      - "linux-generic"
+      - "linux-hwe-*"
+      - "linux-image-*-generic"
+    state: absent
+    purge: yes
+    autoremove: yes
+  become: yes
+  when: ansible_distribution_major_version == "20"
+
+- name: Apply OEM Kernel
+  command: "{{role_path}}/file/apply_oem_kernel.sh"
+  become: yes
+  when: ansible_distribution_major_version == "20"
+
+- name: Install related deb packages
+  apt:
+    name:
+      - gawk
+      - dkms
+      - linux-headers-{{oem_kernel_for_intel_driver}}
+      - libc-dev
+    update_cache: yes
+  become: yes
+  when: ansible_distribution_major_version == "20"
+
+- name: Install Intel Driver
+  apt:
+    name:
+      - intel-i915-dkms
+      - intel-platform-cse-dkms
+      - pmt
+    update_cache: yes
+  become: yes
+  when: ansible_distribution_major_version == "20"
+
+- name: Install Intel run-time packages
+  apt:
+    name:
+      - intel-opencl-icd
+      - intel-level-zero-gpu
+      - level-zero
+      - intel-media-va-driver-non-free
+      - libmfx1
+      - libmfxgen1
+      - libvpl2
+      - libegl-mesa0
+      - libegl1-mesa
+      - libegl1-mesa-dev
+      - libgbm1
+      - libgl1-mesa-dev
+      - libgl1-mesa-dri
+      - libglapi-mesa
+      - libgles2-mesa-dev
+      - libglx-mesa0
+      - libigdgmm11
+      - libxatracker2
+      - mesa-va-drivers
+      - mesa-vdpau-drivers
+      - mesa-vulkan-drivers
+      - va-driver-all
+    update_cache: yes
+  become: yes
+  when: ansible_distribution_major_version == "20"
+  
+
+- name: Install Intel develop packages
+  apt:
+    name:
+      - libigc-dev
+      - intel-igc-cm
+      - libigdfcl-dev
+      - libigfxcmrt-dev
+      - level-zero-dev
+    update_cache: yes
+  become: yes
+  when: ansible_distribution_major_version == "20"
+  
+
+- name: Fix Sound issue
+  lineinfile:
+    dest: /etc/modprobe.d/alsa-base.conf
+    line: options snd-hda-intel model=generic
+    state: present
+  become: yes
+

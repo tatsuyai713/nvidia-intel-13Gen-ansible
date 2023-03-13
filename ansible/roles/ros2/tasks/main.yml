@@ -1,0 +1,52 @@
+---
+- name: ROS 2 get keyring
+  get_url:
+    url: "{{ ros_keyserver }}"
+    dest: "{{ ros_keyring_path }}"
+  become: yes
+
+- name: ROS 2 add sourcelist
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by={{ ros_keyring_path }}] {{ ros_repository }} {{ ansible_lsb.codename }} main"
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: ROS 2 install packages
+  apt:
+    name: "ros-{{ ros_distro }}-{{ ros_package }}"
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: ROS 2 install python3 packages
+  apt:
+    name:
+      - python3-rosdep
+      - python3-colcon-common-extensions
+      - python3-vcstool
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: ROS 2 check rosdep init
+  stat:
+    path: /etc/ros/rosdep/sources.list.d/20-default.list
+  register: ros_repository
+
+- name: ROS 2 rosdep init
+  command: rosdep init
+  when: ros_repository.stat.exists == false
+  become: yes
+
+- name: ROS 2 rosdep update
+  command: rosdep update
+  become: no
+
+- name: ROS 2 add source command
+  lineinfile:
+    dest: /home/$SUDO_USER/.bashrc
+    line: source /opt/ros/{{ ros_distro }}/setup.bash
+    state: present
+  become: yes
+

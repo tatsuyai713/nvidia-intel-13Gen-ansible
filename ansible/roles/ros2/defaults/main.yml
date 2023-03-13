@@ -1,0 +1,6 @@
+---
+ros_distro: "{% if ansible_distribution_major_version == '20' %}foxy{% elif ansible_distribution_major_version == '22' %}humble{% endif %}"
+ros_package: "desktop"
+ros_repository: "http://packages.ros.org/ros2/ubuntu"
+ros_keyserver: "https://raw.githubusercontent.com/ros/rosdistro/master/ros.key"
+ros_keyring_path: "/usr/share/keyrings/ros-archive-keyring.gpg"
