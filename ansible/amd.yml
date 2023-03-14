@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: true
+  become: no
+  roles:
+    - { role: common, tags: ["Common"] }
+    - { role: docker, tags: ["Docker"] }
+    - { role: ros2, tags: ["ROS2"] }
+    - { role: nvidia-driver, tags: ["NVIDIA Driver"] }
+    - { role: nvidia-machine-learning, tags: ["NVIDIA Machine Learning"] }
+    - { role: nvidia-docker, tags: ["NVIDIA Docker"] }
+
