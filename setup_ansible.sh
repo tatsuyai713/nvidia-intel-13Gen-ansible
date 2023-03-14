@@ -6,7 +6,7 @@ sudo apt install -y ansible
 if [ ! $# -ne 1 ]; then
 	if [ "intel" = $1 ]; then
 		ansible-playbook -i ./ansible/inventories/hosts.yml ./ansible/intel.yml
-	if [ "amd" = $1 ]; then
+	elif [ "amd" = $1 ]; then
 		ansible-playbook -i ./ansible/inventories/hosts.yml ./ansible/amd.yml
 	elif [ "docker" = $1 ]; then
 
