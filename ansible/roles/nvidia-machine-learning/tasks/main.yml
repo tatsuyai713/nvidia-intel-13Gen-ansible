@@ -89,3 +89,18 @@
   shell: "apt-mark hold libcudnn8* libnvinfer* python3-libnvinfer* libnvonnxparsers* libnvparsers* tensorrt*"
   changed_when: false
   become: yes
+
+- name: NVIDIA CUDA add PATH
+  lineinfile:
+    dest: /home/$SUDO_USER/.bashrc
+    line:  export PATH="/usr/local/cuda/bin:$PATH"
+    state: present
+  become: yes
+
+- name: NVIDIA CUDA add PATH
+  lineinfile:
+    dest: /home/$SUDO_USER/.bashrc
+    line: export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
+    state: present
+  become: yes
+
