@@ -65,21 +65,27 @@
 - name: Install NVIDIA Machine Learning Packages
   apt:
     name: 
-    - libcudnn8
-    - libcudnn8-dev
-    - libnvinfer8
-    - libnvinfer-bin
-    - libnvinfer-dev
-    - libnvinfer-plugin8
-    - libnvinfer-plugin-dev
-    - libnvinfer-samples
-    - python3-libnvinfer
-    - python3-libnvinfer-dev
-    - libnvonnxparsers8
-    - libnvparsers-dev
-    - libnvparsers8
-    - tensorrt
-    - tensorrt-dev
-    state: latest
+    - libcudnn8=8.5.0.96-1+cuda11.7
+    - libcudnn8-dev=8.5.0.96-1+cuda11.7
+    - libnvinfer8=8.5.3-1+cuda11.8
+    - libnvinfer-bin=8.5.3-1+cuda11.8
+    - libnvinfer-dev=8.5.3-1+cuda11.8
+    - libnvinfer-plugin8=8.5.3-1+cuda11.8
+    - libnvinfer-plugin-dev=8.5.3-1+cuda11.8
+    - libnvinfer-samples=8.5.3-1+cuda11.8
+    - python3-libnvinfer=8.5.3-1+cuda11.8
+    - python3-libnvinfer-dev=8.5.3-1+cuda11.8
+    - libnvonnxparsers8=8.5.3-1+cuda11.8
+    - libnvonnxparsers-dev=8.5.3-1+cuda11.8
+    - libnvparsers-dev=8.5.3-1+cuda11.8
+    - libnvparsers8=8.5.3-1+cuda11.8
+    - tensorrt=8.5.3.1-1+cuda11.8
+    - tensorrt-dev=8.5.3.1-1+cuda11.8
     update_cache: yes
+  become: yes
+
+
+- name: Hold NVIDIA Machine Learning Packages Version
+  shell: "apt-mark hold libcudnn8* libnvinfer* python3-libnvinfer* libnvonnxparsers* libnvparsers* tensorrt*"
+  changed_when: false
   become: yes

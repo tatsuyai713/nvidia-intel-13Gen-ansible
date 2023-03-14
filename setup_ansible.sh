@@ -4,8 +4,8 @@ sudo apt update
 sudo apt install -y ansible
 
 if [ ! $# -ne 1 ]; then
-	if [ "local" = $1 ]; then
-		ansible-playbook -i ./ansible/inventories/hosts.yml ./ansible/local.yml
+	if [ "localhost" = $1 ]; then
+		ansible-playbook -i ./ansible/inventories/hosts.yml ./ansible/localhost.yml
 	elif [ "docker" = $1 ]; then
 
 		if [ ! -e ~/.ssh/id_rsa.pub  ]; then

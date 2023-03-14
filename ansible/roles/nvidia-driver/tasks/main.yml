@@ -36,16 +36,28 @@
     state: present
   become: yes
 
+- name: Unhold NVIDIA DRIVER Version
+  shell: "apt-mark unhold nvidia-driver-{{ nvidia_driver_version }}"
+  changed_when: false
+  become: yes
+
+- name: Uninstall NVIDIA Driver packages
+  apt:
+    name:
+      - nvidia-driver-*
+    state: absent
+    purge: yes
+    autoremove: yes
+  become: yes
+
 - name: Install NVIDIA Driver
   apt:
     name: "nvidia-driver-{{ nvidia_driver_version }}"
     state: latest
     update_cache: yes
   become: yes
-
-- name: Hold NVIDIA DRIVER Version
-  ansible.builtin.dpkg_selections:
-    name: nvidia-driver-{{ nvidia_driver_version }}
-    selection: hold
-  become: yes
     
+- name: Hold NVIDIA DRIVER Version
+  shell: "apt-mark hold nvidia-driver-{{ nvidia_driver_version }}"
+  changed_when: false
+  become: yes

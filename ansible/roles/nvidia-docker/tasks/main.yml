@@ -24,9 +24,9 @@
   register: nvidia_docker_apt
   become: yes
   
-# - name: Reload Docker configuration
-#   service: 
-#     name: docker
-#     state: reloaded
-#   when: nvidia_docker_apt.changed == True
-#   become: yes
+- name: Reload Docker configuration
+  service: 
+    name: docker
+    state: reloaded
+  when: nvidia_docker_apt.changed == True
+  become: yes
