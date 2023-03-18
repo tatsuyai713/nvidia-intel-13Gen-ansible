@@ -36,9 +36,8 @@
 - name: Uninstall Generic/HWE Kernel
   apt:
     name:
-      - "linux-generic"
       - "linux-hwe-*"
-      - "linux-image-*-generic"
+      - "linux*generic"
     state: absent
     purge: yes
     autoremove: yes
