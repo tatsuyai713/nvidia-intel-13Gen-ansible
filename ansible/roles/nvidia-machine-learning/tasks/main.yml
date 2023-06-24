@@ -3,7 +3,7 @@
   apt:
     deb: "{{ item }}"
   with_items:
-    -  https://developer.download.nvidia.com/compute/cuda/repos/ubuntu{{ansible_distribution_major_version}}04/x86_64/cuda-keyring_1.0-1_all.deb
+    -  https://developer.download.nvidia.com/compute/cuda/repos/ubuntu{{ansible_distribution_major_version}}04/x86_64/cuda-keyring_1.1-1_all.deb
   become: yes
 
 - name: ADD CUDA Reposiotory Pin
